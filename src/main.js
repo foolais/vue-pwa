@@ -14,59 +14,59 @@ function invokeUpdate(registration) {
 
 // const version = localStorage.getItem("version");
 if ("serviceWorker" in navigator) {
-  // window.addEventListener("load", async function () {
-  const registration = await navigator.serviceWorker.register(
-    `./service-worker.js`,
-    {
-      scope: "/",
+  window.addEventListener("load", async function () {
+    const registration = await navigator.serviceWorker.register(
+      `./service-worker.js`,
+      {
+        scope: "/",
+      }
+    );
+    if (registration.waiting) {
+      invokeUpdate(registration);
     }
-  );
-  if (registration.waiting) {
-    invokeUpdate(registration);
-  }
-  registration.addEventListener("updatefound", () => {
-    console.log("update found");
-    if (registration.installing) {
-      registration.installing.addEventListener("statechange", () => {
-        if (registration.waiting) {
-          if (this.navigator.serviceWorker.controller) {
-            invokeUpdate(registration);
-          } else {
-            console.log("service worker initialize");
+    registration.addEventListener("updatefound", () => {
+      console.log("update found");
+      if (registration.installing) {
+        registration.installing.addEventListener("statechange", () => {
+          if (registration.waiting) {
+            if (this.navigator.serviceWorker.controller) {
+              invokeUpdate(registration);
+            } else {
+              console.log("service worker initialize");
+            }
           }
-        }
-      });
-    }
+        });
+      }
+    });
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!refreshing) {
+        window.location.reload();
+        refreshing = true;
+      }
+    });
+
+    // TODO
+    // navigator.serviceWorker
+    //   .register(`./service-worker.js?version=${version}`, {
+    //     scope: "/",
+    //   })
+    //   .then((reg) => console.log(reg))
+    //   .catch((err) => console.log(err));
+
+    // // send version rn
+    // if (navigator.serviceWorker.controller) {
+    //   navigator.serviceWorker.controller.postMessage({
+    //     type: "version",
+    //     data: version,
+    //   });
+    // }
+    // // let updateMessageDisplayed = false;
+    // navigator.serviceWorker.addEventListener("message", (event) => {
+    //   console.log("Message received from service workers", event.data);
+    // });
   });
-
-  let refreshing = false;
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (!refreshing) {
-      window.location.reload();
-      refreshing = true;
-    }
-  });
-
-  // TODO
-  // navigator.serviceWorker
-  //   .register(`./service-worker.js?version=${version}`, {
-  //     scope: "/",
-  //   })
-  //   .then((reg) => console.log(reg))
-  //   .catch((err) => console.log(err));
-
-  // // send version rn
-  // if (navigator.serviceWorker.controller) {
-  //   navigator.serviceWorker.controller.postMessage({
-  //     type: "version",
-  //     data: version,
-  //   });
-  // }
-  // // let updateMessageDisplayed = false;
-  // navigator.serviceWorker.addEventListener("message", (event) => {
-  //   console.log("Message received from service workers", event.data);
-  // });
-  // });
 }
 
 // const cacheName = "Notification";
