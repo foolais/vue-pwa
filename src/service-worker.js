@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { precacheAndRoute } from "workbox-precaching";
+const { version } = require("../package.json");
 
 precacheAndRoute(self.__WB_MANIFEST);
 importScripts(
@@ -15,6 +16,14 @@ workbox.setConfig({
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
 console.log({ self });
+
+self.addEventListener("install", () => {
+  caches.open("version").then((cache) => {
+    return cache
+      .put("/version/fronted", new Response(version))
+      .then(() => console.log("version cached"));
+  });
+});
 
 self.addEventListener("message", (event) => {
   if (event.data === "SKIP_WAITING") {
