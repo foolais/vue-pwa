@@ -1,6 +1,10 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <h2>{{ version }}</h2>
+    <button @click="addLocalStorage()">Add LocalStorage</button>
+    <button @click="useLocalStorage()">Use LocalStorage</button>
+    <button @click="removeLocalStorage()">remove localStorage</button>
     <p>
       For a guide and recipes on how to configure / customize this project,<br />
       check out the
@@ -95,10 +99,40 @@
 </template>
 
 <script>
+import Constant from "../const";
+
 export default {
   name: "HelloWorld",
   props: {
     msg: String,
+  },
+  data() {
+    return {
+      isLocalStorage: {
+        version: false,
+      },
+      version: null,
+    };
+  },
+  mounted() {
+    this.addLocalStorage();
+    this.useLocalStorage();
+  },
+  methods: {
+    addLocalStorage() {
+      this.version = Constant.version;
+      localStorage.setItem("version", this.version);
+      this.isLocalStorage.version = true;
+    },
+    useLocalStorage() {
+      const tempVersion = localStorage.getItem("version");
+      console.log("tesa", tempVersion);
+      return tempVersion;
+    },
+    removeLocalStorage() {
+      localStorage.removeItem("version");
+      this.isLocalStorage.version = true;
+    },
   },
 };
 </script>

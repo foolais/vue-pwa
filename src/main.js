@@ -1,37 +1,70 @@
+/* eslint-disable */
 import Vue from "vue";
 import App from "./App.vue";
 import "./registerServiceWorker";
 
-const { version } = "../package.json";
-
 Vue.config.productionTip = false;
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register(`./service-worker.js?version=${version}`, {
-      scope: "/",
-    })
-    .then((reg) => console.log(reg))
-    .catch((err) => console.log(err));
-
-  // if (navigator.serviceWorker.controller) {
-  //   console.log("have service worker");
-  // }
-
-  // navigator.serviceWorker.oncontrollerchange = (event) => {
-  //   console.log("New service worker activated", event);
-  // };
-
-  // send version rn
-  if (navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage({
-      type: "version",
-      data: version,
-    });
+function invokeUpdate(registration) {
+  const isConfirmed = confirm("new update");
+  if (isConfirmed && registration.waiting) {
+    registration.waiting.postMessage("SKIP_WAITING");
   }
-  // let updateMessageDisplayed = false;
-  navigator.serviceWorker.addEventListener("message", (event) => {
-    console.log("Message received from service worker", event.data);
+}
+
+// const version = localStorage.getItem("version");
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async function () {
+    const registration = await navigator.serviceWorker.register(
+      `./service-worker.js`,
+      {
+        scope: "/",
+      }
+    );
+    if (registration.waiting) {
+      invokeUpdate(registration);
+    }
+    registration.addEventListener("updatefound", () => {
+      if (registration.installing) {
+        registration.installing.addEventListener("statechange", () => {
+          if (registration.waiting) {
+            if (this.navigator.serviceWorker.controller) {
+              invokeUpdate(registration);
+            } else {
+              console.log("service worker initialize");
+            }
+          }
+        });
+      }
+    });
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!refreshing) {
+        window.location.reload();
+        refreshing = true;
+      }
+    });
+
+    // TODO
+    // navigator.serviceWorker
+    //   .register(`./service-worker.js?version=${version}`, {
+    //     scope: "/",
+    //   })
+    //   .then((reg) => console.log(reg))
+    //   .catch((err) => console.log(err));
+
+    // // send version rn
+    // if (navigator.serviceWorker.controller) {
+    //   navigator.serviceWorker.controller.postMessage({
+    //     type: "version",
+    //     data: version,
+    //   });
+    // }
+    // // let updateMessageDisplayed = false;
+    // navigator.serviceWorker.addEventListener("message", (event) => {
+    //   console.log("Message received from service workers", event.data);
+    // });
   });
 }
 

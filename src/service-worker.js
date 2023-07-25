@@ -16,12 +16,30 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
 console.log({ self });
 
-let versionData;
 self.addEventListener("message", (event) => {
-  if (event.data.type === "version") {
-    versionData = event.data.data;
+  if (event.data === "SKIP_WAITING") {
+    self.skipWaiting();
   }
 });
+
+// let versionData;
+// self.addEventListener("message", (event) => {
+//   if (event.data.type === "version") {
+//     versionData = event.data.data;
+//     console.log("tesa", versionData);
+//     caches
+//       .open("version")
+//       .then(
+//         (cache) => {
+//           return cache.put("/version/frontend", new Response(versionData));
+//         },
+//         (err) => {
+//           console.log("failed", err);
+//         }
+//       )
+//       .then(() => console.log("version frontend cached success"));
+//   }
+// });
 
 // self.addEventListener("install", async (event) => {
 //   const url = new URL(self.location);
