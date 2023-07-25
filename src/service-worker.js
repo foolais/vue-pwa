@@ -19,9 +19,7 @@ console.log({ self });
 
 self.addEventListener("install", () => {
   caches.open("version").then((cache) => {
-    return cache
-      .put("/version/fronted", new Response(version))
-      .then(() => console.log("version cached"));
+    return cache.put("/version/fronted", new Response(version));
   });
 });
 
