@@ -25,6 +25,7 @@ if ("serviceWorker" in navigator) {
       invokeUpdate(registration);
     }
     registration.addEventListener("updatefound", () => {
+      console.log("update found");
       if (registration.installing) {
         registration.installing.addEventListener("statechange", () => {
           if (registration.waiting) {
