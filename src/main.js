@@ -2,9 +2,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import "./registerServiceWorker";
 
-Vue.config.productionTip = false;
+const { version } = "../package.json";
 
-const version = 2;
+Vue.config.productionTip = false;
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
