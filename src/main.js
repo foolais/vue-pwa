@@ -5,21 +5,20 @@ import "./registerServiceWorker";
 
 Vue.config.productionTip = false;
 
+// alert update
 function invokeUpdate(registration) {
+  // add alert update to local storage
   const isConfirmed = confirm("new update");
   if (isConfirmed && registration.waiting) {
     registration.waiting.postMessage("SKIP_WAITING");
   }
 }
 
-// const version = localStorage.getItem("version");
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async function () {
+// check update
+async function checkUpdate() {
+  if ("serviceWorker" in navigator) {
     const registration = await navigator.serviceWorker.register(
-      `./service-worker.js`,
-      {
-        scope: "/",
-      }
+      `./service-worker.js`
     );
     console.log("registration:", registration);
     if (registration.waiting) {
@@ -30,7 +29,7 @@ if ("serviceWorker" in navigator) {
       if (registration.installing) {
         registration.installing.addEventListener("statechange", () => {
           if (registration.waiting) {
-            if (this.navigator.serviceWorker.controller) {
+            if (navigator.serviceWorker.controller) {
               invokeUpdate(registration);
             } else {
               console.log("service worker initialize");
@@ -47,8 +46,53 @@ if ("serviceWorker" in navigator) {
         refreshing = true;
       }
     });
-  });
+  }
 }
+
+function clickUpdateInDevTools() {
+  // cek jika ada service worker
+  if (
+    navigator &&
+    navigator.serviceWorker &&
+    navigator.serviceWorker.getRegistration
+  ) {
+    navigator.serviceWorker.getRegistration().then((registration) => {
+      if (registration && registration.update) {
+        // Panggil function update di service worker dev tool
+        registration.update();
+      }
+    });
+  }
+}
+
+// berkala panggil function update di service worker dev tool
+const updateInterval = 15 * 60 * 1000; // 15 menit interval
+setInterval(clickUpdateInDevTools, updateInterval);
+
+// sebelum reload gunakan service worker baru
+window.addEventListener("beforeunload", async () => {
+  const registration = await navigator.serviceWorker.getRegistration(
+    "./service-worker.js"
+  );
+  if (registration && registration.waiting) {
+    registration.waiting.postMessage("SKIP_WAITING");
+  }
+});
+
+// add pop up hanya saat ada update baru
+checkUpdate();
+
+// add pop up when user click
+// window.addEventListener("click", () => {
+//   checkUpdate();
+// });
+
+// window.addEventListener("beforeunload", () => {
+//   const ask = confirm("hai?");
+//   if (ask) {
+//     registration.waiting.postMessage("SKIP_WAITING");
+//   }
+// });
 
 // navigator.serviceWorker
 //   .register(`./service-worker.js?version=${version}`, {

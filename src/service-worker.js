@@ -21,9 +21,12 @@ self.addEventListener("install", () => {
   caches.open("version").then((cache) => {
     return cache.put("/version/fronted", new Response(version));
   });
+  // paksa pakai service worker terbaru
+  // self.skipWaiting();
 });
 
 self.addEventListener("message", (event) => {
+  // menunggu kiriman data SKIP_WAITING dari main_js
   if (event.data === "SKIP_WAITING") {
     self.skipWaiting();
   }

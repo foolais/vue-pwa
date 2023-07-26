@@ -6,6 +6,10 @@
     <button @click="useLocalStorage()">Use LocalStorage</button>
     <button @click="removeLocalStorage()">remove localStorage</button>
     <button @click="fetchData()">fetch Data</button>
+    <!-- <h5>{{ isAlertUpdate }}</h5>
+    <div v-if="isAlertUpdate">
+      <button @click="updateSystem">Update</button>
+    </div> -->
     <p>
       For a guide and recipes on how to configure / customize this project,<br />
       check out the
@@ -114,13 +118,27 @@ export default {
         version: false,
       },
       version: null,
+      isAlertUpdate: false,
     };
   },
   mounted() {
+    // const localAlertUpdate = localStorage.getItem("isAlertUpdate");
+    // if (localAlertUpdate !== undefined) {
+    //   this.isAlertUpdate = localAlertUpdate;
+    // }
     this.addLocalStorage();
     this.useLocalStorage();
   },
   methods: {
+    // updateSystem() {
+    //   this.isAlertUpdate = false;
+    //   localStorage.setItem("isAlertUpdate", false);
+    //   const registration = localStorage.getItem("registration");
+    //   if (registration.waiting) {
+    //     localStorage.setItem("isConfirmUpdate", false);
+    //     registration.waiting.postMessage("SKIP_WAITING");
+    //   }
+    // },
     addLocalStorage() {
       this.version = Constant.version;
       localStorage.setItem("version", this.version);
