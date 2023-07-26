@@ -12,47 +12,44 @@ function invokeUpdate(registration) {
   }
 }
 
-setTimeout(() => {
-  // const version = localStorage.getItem("version");
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", async function () {
-      const registration = await navigator.serviceWorker.register(
-        `./service-worker.js`,
-        {
-          scope: "/",
-        }
-      );
-      console.log("registration:", registration);
-      if (registration.waiting) {
-        invokeUpdate(registration);
+// const version = localStorage.getItem("version");
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async function () {
+    const registration = await navigator.serviceWorker.register(
+      `./service-worker.js`,
+      {
+        scope: "/",
       }
-      registration.addEventListener("updatefound", () => {
-        console.log("update founds");
-        if (registration.installing) {
-          registration.installing.addEventListener("statechange", () => {
-            if (registration.waiting) {
-              if (this.navigator.serviceWorker.controller) {
-                invokeUpdate(registration);
-              } else {
-                console.log("service worker initialize");
-              }
+    );
+    console.log("registration:", registration);
+    if (registration.waiting) {
+      invokeUpdate(registration);
+    }
+    registration.addEventListener("updatefound", () => {
+      console.log("update founds");
+      if (registration.installing) {
+        registration.installing.addEventListener("statechange", () => {
+          if (registration.waiting) {
+            if (this.navigator.serviceWorker.controller) {
+              invokeUpdate(registration);
+            } else {
+              console.log("service worker initialize");
             }
-          });
-        }
-      });
-
-      let refreshing = false;
-      navigator.serviceWorker.addEventListener("controllerchange", () => {
-        if (!refreshing) {
-          window.location.reload();
-          refreshing = true;
-        }
-      });
+          }
+        });
+      }
     });
-  }
-}, 1 * 60 * 500);
 
-// TODO
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!refreshing) {
+        window.location.reload();
+        refreshing = true;
+      }
+    });
+  });
+}
+
 // navigator.serviceWorker
 //   .register(`./service-worker.js?version=${version}`, {
 //     scope: "/",
