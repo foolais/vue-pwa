@@ -21,6 +21,7 @@ if ("serviceWorker" in navigator) {
         scope: "/",
       }
     );
+    console.log("registration:", registration);
     if (registration.waiting) {
       invokeUpdate(registration);
     }
@@ -46,28 +47,27 @@ if ("serviceWorker" in navigator) {
         refreshing = true;
       }
     });
-
-    // TODO
-    // navigator.serviceWorker
-    //   .register(`./service-worker.js?version=${version}`, {
-    //     scope: "/",
-    //   })
-    //   .then((reg) => console.log(reg))
-    //   .catch((err) => console.log(err));
-
-    // // send version rn
-    // if (navigator.serviceWorker.controller) {
-    //   navigator.serviceWorker.controller.postMessage({
-    //     type: "version",
-    //     data: version,
-    //   });
-    // }
-    // // let updateMessageDisplayed = false;
-    // navigator.serviceWorker.addEventListener("message", (event) => {
-    //   console.log("Message received from service workers", event.data);
-    // });
   });
 }
+
+// navigator.serviceWorker
+//   .register(`./service-worker.js?version=${version}`, {
+//     scope: "/",
+//   })
+//   .then((reg) => console.log(reg))
+//   .catch((err) => console.log(err));
+
+// // send version rn
+// if (navigator.serviceWorker.controller) {
+//   navigator.serviceWorker.controller.postMessage({
+//     type: "version",
+//     data: version,
+//   });
+// }
+// // let updateMessageDisplayed = false;
+// navigator.serviceWorker.addEventListener("message", (event) => {
+//   console.log("Message received from service workers", event.data);
+// });
 
 // const cacheName = "Notification";
 // caches

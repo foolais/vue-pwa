@@ -29,6 +29,19 @@ self.addEventListener("message", (event) => {
   }
 });
 
+// self.addEventListener("fetch", (event) => {
+//   if (event.request.url.includes("json")) {
+//     event.respondWith(
+//       fetch(event.request).then((response) => {
+//         console.log(response);
+//         return response;
+//       })
+//     );
+//   } else {
+//     event.respondWith(fetch(event.request));
+//   }
+// });
+
 // let versionData;
 // self.addEventListener("message", (event) => {
 //   if (event.data.type === "version") {

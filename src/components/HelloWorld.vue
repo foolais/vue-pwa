@@ -5,6 +5,7 @@
     <button @click="addLocalStorage()">Add LocalStorage</button>
     <button @click="useLocalStorage()">Use LocalStorage</button>
     <button @click="removeLocalStorage()">remove localStorage</button>
+    <button @click="fetchData()">fetch Data</button>
     <p>
       For a guide and recipes on how to configure / customize this project,<br />
       check out the
@@ -100,6 +101,7 @@
 
 <script>
 import Constant from "../const";
+const axios = require("axios");
 
 export default {
   name: "HelloWorld",
@@ -132,6 +134,17 @@ export default {
     removeLocalStorage() {
       localStorage.removeItem("version");
       this.isLocalStorage.version = true;
+    },
+    fetchData() {
+      const urlString = "https://jsonplaceholder.typicode.com/todos/1";
+      axios
+        .get(urlString)
+        .then((response) => {
+          console.log("response", response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
