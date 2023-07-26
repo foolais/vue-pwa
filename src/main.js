@@ -50,7 +50,7 @@ setTimeout(() => {
       });
     });
   }
-}, 1 * 60 * 1000);
+}, 1 * 60 * 500);
 
 // TODO
 // navigator.serviceWorker
