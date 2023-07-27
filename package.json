@@ -1,6 +1,6 @@
 {
   "name": "vue-pwa",
-  "version": "1.5.4-stable",
+  "version": "1.5.5",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
