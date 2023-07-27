@@ -8,6 +8,7 @@ Vue.config.productionTip = false;
 // alert update
 function invokeUpdate(registration) {
   // add alert update to local storage
+  console.log("registrations", registration);
   const isConfirmed = confirm("new update");
   if (isConfirmed && registration.waiting) {
     registration.waiting.postMessage("SKIP_WAITING");
