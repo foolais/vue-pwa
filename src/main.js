@@ -69,22 +69,21 @@ function clickUpdateInDevTools() {
 const updateInterval = 15 * 60 * 1000; // 15 menit interval
 setInterval(clickUpdateInDevTools, updateInterval);
 
-// sebelum reload gunakan service worker baru
-window.addEventListener("beforeunload", async () => {
-  const registration = await navigator.serviceWorker.getRegistration(
-    "./service-worker.js"
-  );
-  if (registration && registration.waiting) {
-    registration.waiting.postMessage("SKIP_WAITING");
-  }
-});
-
 // add pop up hanya saat ada update baru
 checkUpdate();
 
 // add pop up when user click
 // window.addEventListener("click", () => {
 //   checkUpdate();
+// });
+
+// window.addEventListener("beforeunload", async () => {
+//   const registration = await navigator.serviceWorker.getRegistration(
+//     "./service-worker.js"
+//   );
+//   if (registration && registration.waiting) {
+//     registration.waiting.postMessage("SKIP_WAITING");
+//   }
 // });
 
 // window.addEventListener("beforeunload", () => {
