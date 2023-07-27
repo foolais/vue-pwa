@@ -66,7 +66,7 @@ function clickUpdateInDevTools() {
 }
 
 // berkala panggil function update di service worker dev tool
-const updateInterval = 15 * 60 * 1000; // 15 menit interval
+const updateInterval = 1 * 60 * 1000; // 15 menit interval
 setInterval(clickUpdateInDevTools, updateInterval);
 
 // sebelum reload gunakan service worker baru
