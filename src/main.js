@@ -21,10 +21,6 @@ async function checkUpdate() {
     const registration = await navigator.serviceWorker.register(
       `./service-worker.js`
     );
-    console.log("registration:", registration);
-    if (registration.waiting) {
-      invokeUpdate(registration);
-    }
     registration.addEventListener("updatefound", () => {
       console.log("update founds");
       if (registration.installing) {
